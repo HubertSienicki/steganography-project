@@ -14,16 +14,20 @@ auto print_last_write_time = [](fs::file_time_type const &fileTime) -> void {
 //----------------//
 
 OptionsManager::OptionsManager(std::string argument, std::string pathToFile){
-    this->path = fs::path(pathToFile);
+    this->file = fs::path(pathToFile);
     this->argument = argument;
 }
 
+/**
+ * @brief Displays information about a file
+ */
 void OptionsManager::fileInformation() {
-    std::cout << "FILE NAME: " << this->path.filename() << std::endl;
-    std::cout << "FILE SIZE: " << file_size(this->path) << std::endl;
+    std::cout << "FILE NAME: " << this->file.filename() << std::endl;
+    std::cout << "FILE SIZE: " << file_size(this->file) << " bits" << std::endl;
 
-    auto fileTime = fs::last_write_time(this->path);
+    auto fileTime = fs::last_write_time(this->file);
     print_last_write_time(fileTime);
+
 }
 
 

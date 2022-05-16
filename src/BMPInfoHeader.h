@@ -1,0 +1,14 @@
+//
+// Created by kneiv on 5/16/2022.
+//
+
+#ifndef STEGANOGRAPHY_PROJECT_BMPINFOHEADER_H
+#define STEGANOGRAPHY_PROJECT_BMPINFOHEADER_H
+
+
+class BMPInfoHeader {
+
+};
+
+
+#endif //STEGANOGRAPHY_PROJECT_BMPINFOHEADER_H

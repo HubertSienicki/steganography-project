@@ -5,7 +5,7 @@ namespace fs = std::filesystem;
 
 struct OptionsManager{
     private:
-        fs::path path = fs::path("");
+        fs::path file = fs::path("");
         std::string argument;
 
     
@@ -16,6 +16,4 @@ struct OptionsManager{
         // void encrypt();
         // void decrypt();
         // void check();
-        std::string fileTimeToString();
-
 };

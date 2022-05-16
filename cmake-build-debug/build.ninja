@@ -55,6 +55,30 @@ build CMakeFiles/steganography_project.dir/main.cpp.obj: CXX_COMPILER__steganogr
   OBJECT_DIR = CMakeFiles\steganography_project.dir
   OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir
 
+build CMakeFiles/steganography_project.dir/src/BMP.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/BMP.cpp || cmake_object_order_depends_target_steganography_project
+  DEP_FILE = CMakeFiles\steganography_project.dir\src\BMP.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  OBJECT_DIR = CMakeFiles\steganography_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
+
+build CMakeFiles/steganography_project.dir/src/BMPInfoHeader.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/BMPInfoHeader.cpp || cmake_object_order_depends_target_steganography_project
+  DEP_FILE = CMakeFiles\steganography_project.dir\src\BMPInfoHeader.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  OBJECT_DIR = CMakeFiles\steganography_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
+
+build CMakeFiles/steganography_project.dir/src/BMPColorHeader.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/BMPColorHeader.cpp || cmake_object_order_depends_target_steganography_project
+  DEP_FILE = CMakeFiles\steganography_project.dir\src\BMPColorHeader.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  OBJECT_DIR = CMakeFiles\steganography_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
+
+build CMakeFiles/steganography_project.dir/src/BMPFileHeader.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/BMPFileHeader.cpp || cmake_object_order_depends_target_steganography_project
+  DEP_FILE = CMakeFiles\steganography_project.dir\src\BMPFileHeader.cpp.obj.d
+  FLAGS = -g -std=gnu++20
+  OBJECT_DIR = CMakeFiles\steganography_project.dir
+  OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target steganography_project
@@ -63,7 +87,7 @@ build CMakeFiles/steganography_project.dir/main.cpp.obj: CXX_COMPILER__steganogr
 #############################################
 # Link the executable steganography_project.exe
 
-build steganography_project.exe: CXX_EXECUTABLE_LINKER__steganography_project_Debug CMakeFiles/steganography_project.dir/main.cpp.obj
+build steganography_project.exe: CXX_EXECUTABLE_LINKER__steganography_project_Debug CMakeFiles/steganography_project.dir/main.cpp.obj CMakeFiles/steganography_project.dir/src/BMP.cpp.obj CMakeFiles/steganography_project.dir/src/BMPInfoHeader.cpp.obj CMakeFiles/steganography_project.dir/src/BMPColorHeader.cpp.obj CMakeFiles/steganography_project.dir/src/BMPFileHeader.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\steganography_project.dir
