@@ -34,3 +34,4 @@
 #folders
 cmake-build-debug
 .clion
+.idea
