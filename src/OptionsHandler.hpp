@@ -1,7 +1,6 @@
 #include "OptionsHandler.cpp"
 #include <iostream>
 #include <string>
-#include <regex>
 #include "ExceptionHandler.cpp"
 
 OptionsHandler::OptionsHandler(int argc, char **argv){

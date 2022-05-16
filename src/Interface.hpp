@@ -1,13 +1,14 @@
 #include "..\include\CLI11\include\CLI\CLI.hpp"
 #include "Interface.cpp"
 #include "OptionsHandler.hpp"
-#include<string>
+#include <string>
 #include <iostream>
+#include "OptionsManager.hpp"
 
 std::string message = "Programme allowing the user to encrypt and decrypt \n messages using LSB insertion method \n";
 
 Interface::Interface(){
-    
+
 }
 
 /**
@@ -32,7 +33,8 @@ bool Interface::init(int argc, char **argv){
     CLI11_PARSE(app, argc, argv);
 
     if(this->Validate(argc, argv)){ 
-        return 1;
+        OptionsManager manager(argv[1], argv[2]);
+        manager.fileInformation();
     }else{
         return 0;
     }
@@ -50,7 +52,7 @@ bool Interface::init(int argc, char **argv){
  */
 
 bool Interface::Validate(int argc, char **argv){
-    OptionsHandler handler(argc, argv); 
+    OptionsHandler handler(argc, argv);
     try
     {
         if(handler.Validate_Argument()){

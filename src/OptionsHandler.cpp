@@ -1,6 +1,5 @@
 #include <string>
 #include <vector>
-#include <regex>
 
 struct OptionsHandler{
     private:
@@ -13,7 +12,8 @@ struct OptionsHandler{
 
     public:
         OptionsHandler(int argc, char **argv);
-        bool Validate_Extension();
+
+    bool Validate_Extension();
         bool findExtension();
         bool Validate_Argument();
         

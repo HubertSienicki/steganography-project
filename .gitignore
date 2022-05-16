@@ -33,5 +33,8 @@
 
 #folders
 cmake-build-debug
-.clion
 .idea
+
+#files
+CMakeLists.txt
+
