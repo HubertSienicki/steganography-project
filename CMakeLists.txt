@@ -3,4 +3,4 @@ project(steganography_project)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(steganography_project main.cpp src/BMP.cpp src/BMP.h src/BMPInfoHeader.cpp src/BMPInfoHeader.h src/BMPColorHeader.cpp src/BMPColorHeader.h src/BMPFileHeader.cpp src/BMPFileHeader.h)
+add_executable(steganography_project main.cpp src/BMP.cpp src/BMP.h src/PNG.cpp src/PNG.h src/PNGFIleHeader.cpp src/PNGFIleHeader.h)
