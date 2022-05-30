@@ -3,21 +3,17 @@
 //
 
 #ifndef STEGANOGRAPHY_PROJECT_BMP_H
-#include <vector>
+
 #define STEGANOGRAPHY_PROJECT_BMP_H
-
-
-
-
-
+#include <vector>
 #include <cstdint>
 #include <fstream>
 #include <vector>
-
+#include <bitset>
 
 struct BMPFileHeader {
     std::uint16_t signature{0x4D42}; //File signature ALWAYS: MB or 0x4D(B)42(M)
-    std::uint32_t fileSize{0}; //Size of a file in bytes;
+    std::uint32_t fileSize{0}; //Size of a file in bits;
     std::uint32_t data_offset{0}; //Offset from the start of a file to the bitmap data
 };
 
@@ -45,15 +41,19 @@ struct BMP {
     const char* filename;
     int dataSize;
     unsigned char* dataCopy;
+    int bitsToEncode;
 
 
-    BMP(const char* filename); //Invokes readBMP method;
+    BMP(const char* filename, std::string message); //Invokes readBMP method;
 
     void readBMP(const char* filename);
     void readBMPFileHeader(std::ifstream& input);
     void readBMPInfoHeader(std::ifstream& input);
     void encodeMessage(std::ifstream& input, std::string message);
+    void decodeMessage(std::ifstream& input, int seed);
     void writeBitmap();
+    int generateSeed();
+    void printBitMapInformation();
 
 private:
     void copyData(std::ifstream& input);
