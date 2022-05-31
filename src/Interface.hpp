@@ -25,20 +25,25 @@ bool Interface::init(int argc, char **argv){
 
     std::string filename = "default";
 
-    app.add_option("-i, --info", "Information string");
+    app.add_option("-i, --info", "Prints information about a provided file. \n USAGE: ./steganography_project.exe -i *path/to/file*");
     app.add_option("-e, --encrypt", "Encryption");
     app.add_option("-d, --decrypt", "Decryption");
     app.add_option("-c, --check", "Check");
 
     CLI11_PARSE(app, argc, argv);
 
-    if(this->Validate(argc, argv)){ 
-        OptionsManager manager(argv[1], argv[2], this->getExtension(argv));
-        manager.fileInformation();
-    }else{
+    if((argv[2] == nullptr || argv[2] == "" ) && (argv[1] != "-h" || argv[1] != "--help")) {
+        std::cerr << "ERROR: Provided path is empty. Please provide a path to the file you wish to encode to a file."
+                  << "\n";
         return 0;
+    }else{
+            if (this->Validate(argc, argv)) {
+                OptionsManager manager(argv[1], argv[2], this->getExtension(argv));
+                manager.fileInformation();
+            } else {
+                return 0;
+            }
     }
-
     return 0;
 }
 
