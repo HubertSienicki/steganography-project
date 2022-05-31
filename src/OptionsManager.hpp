@@ -1,18 +1,20 @@
-#include "OptionsManager.cpp"
 #include "BMP.h"
-#include <iostream>
+#include "OptionsManager.cpp"
 #include <chrono>
+#include <iostream>
 #include <utility>
 
 
-//HELPER
+/**
+ * @brief Helper method for printing last date modified
+ */
 auto print_last_write_time = [](fs::file_time_type const &fileTime) -> void {
     std::time_t currentFileTime = std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(fileTime));
     std::cout << "LAST MODIFIED: " << std::asctime(std::localtime(&currentFileTime)) << "\n";
 };
 //----------------//
 
-OptionsManager::OptionsManager(std::string argument, const char* pathToFile, std::string extension){
+OptionsManager::OptionsManager(std::string argument, const char *pathToFile, std::string extension) {
     this->file = fs::path(pathToFile);
     this->filename = pathToFile;
     this->argument = std::move(argument);
@@ -26,25 +28,27 @@ void OptionsManager::fileInformation() {
     std::cout << "Argument: " << this->argument << "\n";
     std::cout << "FILE NAME: " << this->file.filename() << "\n";
 
-    if(this->extension == ".bmp"){
+    if (this->extension == ".bmp") {
         BMP bitMap(this->filename);
         bitMap.printBitMapInformation();
     }
     auto fileTime = fs::last_write_time(this->file);
     print_last_write_time(fileTime);
-
 }
 
-void OptionsManager::manage() {
-    if(this->argument == "-i"){
-        this->fileInformation();
-    }else if(this->argument == "-e"){
-        std::cout << "Encrypt method here.....";
-    }else if(this->argument == "-d"){
-        std::cout << "DECRYPT METHOD HERE...";
-    }
+/**
+ * @brief calls for en encoding constructor
+ * @param seed
+ */
+
+void OptionsManager::encrypt(std::string message) {
+    BMP bitmap(this->filename, message);
 }
 
-
-
-
+/**
+ * @brief calls for a decoding constructor
+ * @param seed
+ */
+void OptionsManager::decrypt(int seed) {
+    BMP bitmap(this->filename, seed);
+}

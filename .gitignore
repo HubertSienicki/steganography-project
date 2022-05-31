@@ -37,4 +37,5 @@ cmake-build-debug
 
 #files
 CMakeLists.txt
+.clang-format
 

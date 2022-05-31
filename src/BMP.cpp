@@ -3,13 +3,13 @@
 //
 
 #include "BMP.h"
-#include <iostream>
 #include <bitset>
+#include <iostream>
 #include <valarray>
 
 unsigned int bmpFileHeader[14]; //temporary holder for file header
-unsigned int bmpInfoHeader[124]; //temporary holder for info header
-unsigned char temp; //temp for holding data from a bitmap
+unsigned int bmpInfoHeader[124];//temporary holder for info header
+unsigned char temp;             //temp for holding data from a bitmap
 
 
 //Constructor invokes read method.
@@ -17,9 +17,9 @@ BMP::BMP(const char *filename) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
-    if(!input){
+    if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
-    }else{
+    } else {
         this->readBMP(filename);
     }
 }
@@ -29,9 +29,9 @@ BMP::BMP(const char *filename, std::string message) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
-    if(!input){
+    if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
-    }else{
+    } else {
         this->readBMP(filename);
         this->encodeMessage(input, message);
     }
@@ -42,9 +42,9 @@ BMP::BMP(const char *filename, int seed) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
-    if(!input){
+    if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
-    }else{
+    } else {
         this->readBMP(filename);
         this->decodeMessage(input, seed);
     }
@@ -68,9 +68,9 @@ void BMP::readBMP(const char *filename) {
  * @param input ifstream of a file
  */
 
-void BMP::readBMPFileHeader(std::ifstream& input) {
-    for(int i =0;i<14;i++) {
-        temp = (unsigned char)input.get();
+void BMP::readBMPFileHeader(std::ifstream &input) {
+    for (int i = 0; i < 14; i++) {
+        temp = (unsigned char) input.get();
         bmpFileHeader[i] = temp;
     }
 
@@ -87,8 +87,8 @@ void BMP::readBMPFileHeader(std::ifstream& input) {
  */
 
 void BMP::readBMPInfoHeader(std::ifstream &input) {
-    for(int i = 0;i < 124; i++) {
-        temp = (unsigned char)input.get();
+    for (int i = 0; i < 124; i++) {
+        temp = (unsigned char) input.get();
         bmpInfoHeader[i] = temp;
     }
 
@@ -110,31 +110,31 @@ void BMP::readBMPInfoHeader(std::ifstream &input) {
 void BMP::encodeMessage(std::ifstream &input, std::string message) {
 
     int messageLength = message.size();
-    this->bitsToEncode = messageLength * 8; // Every letter is 8 bits, hence the table size will is msg length * 8
+    this->bitsToEncode = messageLength * 8;// Every letter is 8 bits, hence the table size will is msg length * 8
 
-    if(this->bmp_info_header.bits_per_pixel == 24){
+    if (this->bmp_info_header.bits_per_pixel == 24) {
         input.seekg(this->bmp_file_header.data_offset);
 
         this->copyData(input);
 
         input.close();
 
-        std::bitset <8> toEncode[bitsToEncode]; // for easier read data will be encoded to a set of binary letters
+        std::bitset<8> toEncode[bitsToEncode];// for easier read data will be encoded to a set of binary letters
 
         for (int j = 0; j < bitsToEncode; ++j) {
-            toEncode[j] = this->dataCopy[this->bmp_file_header.data_offset + j]; // filling a table of bits for encoding;
+            toEncode[j] = this->dataCopy[this->bmp_file_header.data_offset + j];// filling a table of bits for encoding;
         }
 
         for (int i = 0; i < messageLength; ++i) {
-            std::bitset<8> charBinary(message[i]); // binary representation of a letter in a message;
+            std::bitset<8> charBinary(message[i]);// binary representation of a letter in a message;
             for (int j = 0; j < 8; ++j) {
-                if(charBinary[7 - j] != toEncode[8 * i + j][7]){
+                if (charBinary[7 - j] != toEncode[8 * i + j][7]) {
                     this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] = this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] << 1;
                 }
             }
         }
         this->writeBitmap();
-    }else{
+    } else {
         std::cerr << "BitMap is not supported for " << this->bmp_info_header.bits_per_pixel << " bits, please try again with a 24 bit BitMap. \n";
     }
 }
@@ -145,15 +145,16 @@ void BMP::encodeMessage(std::ifstream &input, std::string message) {
 
 void BMP::writeBitmap() {
     std::ofstream file;
-    file.open("C:\\Users\\kneiv\\CLionProjects\\untitled\\test.bmp", std::ios::out | std::ios::binary);
+    file.open("C:\\Users\\kneiv\\CLionProjects\\steganography-project\\testDir\\test.bmp", std::ios::out | std::ios::binary);
 
-    if(!file.is_open()){
+    if (!file.is_open()) {
         std::cerr << "New file could not be created. \n";
         return;
-    }else{
-        file.write(reinterpret_cast<char*>(this->dataCopy), this->dataSize);
+    } else {
+        file.write(reinterpret_cast<char *>(this->dataCopy), this->dataSize);
         std::cout << "------------------------------------------ \n";
-        std::cout << "File has been written successfully! \n" << "Seed: " << this->generateSeed() << "\n";
+        std::cout << "File has been written successfully! \n"
+                  << "Seed: " << this->generateSeed() << "\n";
         std::cerr << "INFO: PLEASE REMEMBER TO SAVE THE SEED AS IT IS IMPORTANT TO DECODE THE MESSAGE! \n";
         file.close();
         return;
@@ -166,26 +167,26 @@ void BMP::writeBitmap() {
  * @param seed Generated seed for decoding message.
  */
 
-void BMP::decodeMessage(std::ifstream& input, int seed) {
+void BMP::decodeMessage(std::ifstream &input, int seed) {
 
-    std::ifstream inp("C:\\Users\\kneiv\\CLionProjects\\untitled\\test.bmp");
-
-    int msgLength = seed/8;
+    int msgLength = seed / 8;
     char decodedMessage[msgLength];
 
     std::bitset<8> currentChar;
     std::bitset<8> decodedChar;
-    inp.seekg(this->bmp_file_header.data_offset);
+    input.seekg(this->bmp_file_header.data_offset);
 
     for (int i = 0; i < msgLength; ++i) {
         for (int j = 0; j < 8; ++j) {
-            currentChar = (std::bitset<8>)inp.get();
-            decodedChar[7-j] = currentChar[0];
+            currentChar = (std::bitset<8>) input.get();
+            decodedChar[7 - j] = currentChar[0];
         }
         unsigned long longChar = decodedChar.to_ulong();
-        unsigned char c = static_cast<unsigned char> (longChar);
+        unsigned char c = static_cast<unsigned char>(longChar);
         decodedMessage[i] = c;
     }
+
+    std::cout << "Decoded Message: ";
 
     for (int i = 0; i < msgLength; ++i) {
         std::cout << decodedMessage[i];
@@ -196,9 +197,12 @@ void BMP::decodeMessage(std::ifstream& input, int seed) {
  * @brief Prints bitmap information
  */
 void BMP::printBitMapInformation() {
-    std::cout << "Size of a bitmap: " << this->bmp_file_header.fileSize * std::pow(10, -3) << " kB" << "\n";
-    std::cout << "Dimensions of a bitmap: " << this->bmp_info_header.width << "x" << this->bmp_info_header.height << " (pixels) " <<"\n";
-    std::cout << "Format: " << this->bmp_info_header.bits_per_pixel << " bits" << "\n";
+    std::cout << "Size of a bitmap: " << this->bmp_file_header.fileSize * std::pow(10, -3) << " kB"
+              << "\n";
+    std::cout << "Dimensions of a bitmap: " << this->bmp_info_header.width << "x" << this->bmp_info_header.height << " (pixels) "
+              << "\n";
+    std::cout << "Format: " << this->bmp_info_header.bits_per_pixel << " bits"
+              << "\n";
 }
 
 
@@ -216,7 +220,7 @@ void BMP::copyData(std::ifstream &input) {
     input.seekg(0);
 
     for (int i = 0; i < dataSize; ++i) {
-        value = (unsigned char)input.get();
+        value = (unsigned char) input.get();
         this->dataCopy[i] = value;
     }
 }
@@ -224,6 +228,6 @@ void BMP::copyData(std::ifstream &input) {
 /**
  * @return seed
  */
-int BMP::generateSeed(){
-    return this->bitsToEncode; //bitcount for now.
+int BMP::generateSeed() {
+    return this->bitsToEncode;//bitcount for now.
 }
