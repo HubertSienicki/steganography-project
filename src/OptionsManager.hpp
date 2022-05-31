@@ -35,6 +35,16 @@ void OptionsManager::fileInformation() {
 
 }
 
+void OptionsManager::manage() {
+    if(this->argument == "-i"){
+        this->fileInformation();
+    }else if(this->argument == "-e"){
+        std::cout << "Encrypt method here.....";
+    }else if(this->argument == "-d"){
+        std::cout << "DECRYPT METHOD HERE...";
+    }
+}
+
 
 
 

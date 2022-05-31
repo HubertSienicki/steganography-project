@@ -25,7 +25,7 @@ bool Interface::init(int argc, char **argv){
 
     std::string filename = "default";
 
-    app.add_option("-i, --info", "Prints information about a provided file. \n USAGE: ./steganography_project.exe -i *path/to/file*");
+    app.add_option("-i, --info", "Prints information about a provided file. \nUSAGE: ./steganography_project.exe -i *path/to/file*");
     app.add_option("-e, --encrypt", "Encryption");
     app.add_option("-d, --decrypt", "Decryption");
     app.add_option("-c, --check", "Check");
@@ -39,7 +39,7 @@ bool Interface::init(int argc, char **argv){
     }else{
             if (this->Validate(argc, argv)) {
                 OptionsManager manager(argv[1], argv[2], this->getExtension(argv));
-                manager.fileInformation();
+                manager.manage();
             } else {
                 return 0;
             }
