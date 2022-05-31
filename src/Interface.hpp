@@ -33,7 +33,7 @@ bool Interface::init(int argc, char **argv){
     CLI11_PARSE(app, argc, argv);
 
     if(this->Validate(argc, argv)){ 
-        OptionsManager manager(argv[1], argv[2]);
+        OptionsManager manager(argv[1], argv[2], this->getExtension(argv));
         manager.fileInformation();
     }else{
         return 0;
@@ -83,4 +83,24 @@ bool Interface::Validate(int argc, char **argv){
         return 0;
     }
     return 0;
+}
+
+/**
+ * @param argv arguments provided to the program
+ * @return extension
+ */
+std::string Interface::getExtension(char **argv) {
+    std::string path = argv[2];
+    std::string extension;
+
+    for (int i = 0; i < path.size(); i++)
+    {
+        if(path.at(i) == '.'){
+            std::string extension;
+            extension = path.substr(i, path.length() - 1);
+            extension = extension;
+            return extension;
+        }
+    }
+    return NULL;
 }

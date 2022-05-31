@@ -44,7 +44,10 @@ struct BMP {
     int bitsToEncode;
 
 
-    BMP(const char* filename, std::string message); //Invokes readBMP method;
+    BMP(const char* filename, std::string message); //encoding constructor
+    BMP(const char* filename, int seed); //Decoding constructor;
+    BMP(const char* filename); //Default constructor for reading.
+
 
     void readBMP(const char* filename);
     void readBMPFileHeader(std::ifstream& input);

@@ -6,6 +6,7 @@
 OptionsHandler::OptionsHandler(int argc, char **argv){
         this->argument = argv[1];
         this->path = argv[2];
+        this->extension = this->findExtension();
 }
 
 /**
@@ -65,8 +66,6 @@ bool OptionsHandler::findExtension(){
     for (int i = 0; i < this->path.size(); i++)
     {
         if(this->path.at(i) == '.'){
-            std::cout << "Path: " << this->path<< std::endl;
-        
             std::string extension;
             extension = path.substr(i, path.length() - 1);
             this->extension = extension;
