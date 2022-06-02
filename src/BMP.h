@@ -3,12 +3,11 @@
 //
 
 #ifndef STEGANOGRAPHY_PROJECT_BMP_H
-
-#define STEGANOGRAPHY_PROJECT_BMP_H
 #include <bitset>
 #include <cstdint>
 #include <fstream>
 #include <vector>
+#define STEGANOGRAPHY_PROJECT_BMP_H
 
 struct BMPFileHeader {
     std::uint16_t signature{0x4D42};//File signature ALWAYS: MB or 0x4D(B)42(M)
