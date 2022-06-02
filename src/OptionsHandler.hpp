@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-OptionsHandler::OptionsHandler(int argc, char **argv) {
+OptionsHandler::OptionsHandler(int argc, char** argv) {
     this->argument = argv[1];
     this->path = argv[2];
     this->extension = this->findExtension();
@@ -42,7 +42,7 @@ bool OptionsHandler::Validate_Extension() {
             }
         }
         throw InvalidFormatException();
-    } catch (const InvalidFormatException &e) {
+    } catch (const InvalidFormatException& e) {
         std::cout << e.what() << '\n';
         return 0;
     }

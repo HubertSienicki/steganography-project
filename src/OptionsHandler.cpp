@@ -11,7 +11,7 @@ private:
 
 
 public:
-    OptionsHandler(int argc, char **argv);
+    OptionsHandler(int argc, char** argv);
 
     bool Validate_Extension();
     bool findExtension();

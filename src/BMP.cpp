@@ -13,7 +13,7 @@ unsigned char temp;             //temp for holding data from a bitmap
 
 
 //Constructor invokes read method.
-BMP::BMP(const char *filename) {
+BMP::BMP(const char* filename) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
@@ -25,7 +25,7 @@ BMP::BMP(const char *filename) {
 }
 
 //Encode
-BMP::BMP(const char *filename, std::string message) {
+BMP::BMP(const char* filename, std::string message) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
@@ -38,7 +38,7 @@ BMP::BMP(const char *filename, std::string message) {
 }
 
 //Decode
-BMP::BMP(const char *filename, int seed) {
+BMP::BMP(const char* filename, int seed) {
     this->filename = filename;
     std::ifstream input(this->filename);
 
@@ -55,7 +55,7 @@ BMP::BMP(const char *filename, int seed) {
  * @brief Combines both bmp
  * @param filename
  */
-void BMP::readBMP(const char *filename) {
+void BMP::readBMP(const char* filename) {
 
     std::ifstream input(filename);
     this->readBMPFileHeader(input);
@@ -68,7 +68,7 @@ void BMP::readBMP(const char *filename) {
  * @param input ifstream of a file
  */
 
-void BMP::readBMPFileHeader(std::ifstream &input) {
+void BMP::readBMPFileHeader(std::ifstream& input) {
     for (int i = 0; i < 14; i++) {
         temp = (unsigned char) input.get();
         bmpFileHeader[i] = temp;
@@ -86,7 +86,7 @@ void BMP::readBMPFileHeader(std::ifstream &input) {
  * @param input ifstream of a file
  */
 
-void BMP::readBMPInfoHeader(std::ifstream &input) {
+void BMP::readBMPInfoHeader(std::ifstream& input) {
     for (int i = 0; i < 124; i++) {
         temp = (unsigned char) input.get();
         bmpInfoHeader[i] = temp;
@@ -107,7 +107,7 @@ void BMP::readBMPInfoHeader(std::ifstream &input) {
  * @param message message to encode
  */
 
-void BMP::encodeMessage(std::ifstream &input, std::string message) {
+void BMP::encodeMessage(std::ifstream& input, std::string message) {
 
     int messageLength = message.size();
     this->bitsToEncode = messageLength * 8;// Every letter is 8 bits, hence the table size will is msg length * 8
@@ -151,7 +151,7 @@ void BMP::writeBitmap() {
         std::cerr << "New file could not be created. \n";
         return;
     } else {
-        file.write(reinterpret_cast<char *>(this->dataCopy), this->dataSize);
+        file.write(reinterpret_cast<char*>(this->dataCopy), this->dataSize);
         std::cout << "------------------------------------------ \n";
         std::cout << "File has been written successfully! \n"
                   << "Seed: " << this->generateSeed() << "\n";
@@ -167,7 +167,7 @@ void BMP::writeBitmap() {
  * @param seed Generated seed for decoding message.
  */
 
-void BMP::decodeMessage(std::ifstream &input, int seed) {
+void BMP::decodeMessage(std::ifstream& input, int seed) {
 
     int msgLength = seed / 8;
     char decodedMessage[msgLength];
@@ -213,7 +213,7 @@ void BMP::printBitMapInformation() {
  * @param input
  */
 
-void BMP::copyData(std::ifstream &input) {
+void BMP::copyData(std::ifstream& input) {
     this->dataCopy = new unsigned char[dataSize];
     unsigned int value = 0;
 

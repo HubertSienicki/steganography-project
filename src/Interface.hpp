@@ -18,7 +18,7 @@ Interface::Interface() {}
  * @return false 
  */
 
-bool Interface::init(int argc, char **argv) {
+bool Interface::init(int argc, char** argv) {
     CLI::App app{message};
 
     std::pair<std::string, std::string> args;
@@ -90,7 +90,7 @@ bool Interface::init(int argc, char **argv) {
  * @return false 
  */
 
-bool Interface::Validate(int argc, char **argv) {
+bool Interface::Validate(int argc, char** argv) {
     OptionsHandler handler(argc, argv);
     try {
         if (handler.Validate_Argument()) {
@@ -100,16 +100,16 @@ bool Interface::Validate(int argc, char **argv) {
                         if (handler.Validate_Extension()) {
                             return 1;
                         }
-                    } catch (const InvalidFormatException &e) {
+                    } catch (const InvalidFormatException& e) {
                         std::cerr << e.what() << '\n';
                     }
                 }
-            } catch (const FileNotFoundException &e) {
+            } catch (const FileNotFoundException& e) {
                 std::cerr << e.what() << '\n';
             }
             return 0;
         }
-    } catch (const InvalidArgumentException &e) {
+    } catch (const InvalidArgumentException& e) {
         std::cerr << e.what(handler.getArgument()) << '\n';
         return 0;
     }
@@ -120,7 +120,7 @@ bool Interface::Validate(int argc, char **argv) {
  * @param argv arguments provided to the program
  * @return extension
  */
-std::string Interface::getExtension(char **argv) {
+std::string Interface::getExtension(char** argv) {
     std::string path = argv[2];
     std::string extension;
 

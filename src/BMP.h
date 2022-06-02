@@ -36,28 +36,28 @@ struct BMP {
     BMPFileHeader bmp_file_header;
     BMPInfoHeader bmp_info_header;
 
-    const char *filename;
+    const char* filename;
     int dataSize;
-    unsigned char *dataCopy;
+    unsigned char* dataCopy;
     int bitsToEncode;
 
 
-    BMP(const char *filename, std::string message);//Encoding constructor
-    BMP(const char *filename, int seed);           //Decoding constructor;
-    BMP(const char *filename);                     //Default constructor for reading.
+    BMP(const char* filename, std::string message);//Encoding constructor
+    BMP(const char* filename, int seed);           //Decoding constructor;
+    BMP(const char* filename);                     //Default constructor for reading.
 
 
-    void readBMP(const char *filename);
-    void readBMPFileHeader(std::ifstream &input);
-    void readBMPInfoHeader(std::ifstream &input);
-    void encodeMessage(std::ifstream &input, std::string message);
-    void decodeMessage(std::ifstream &input, int seed);
+    void readBMP(const char* filename);
+    void readBMPFileHeader(std::ifstream& input);
+    void readBMPInfoHeader(std::ifstream& input);
+    void encodeMessage(std::ifstream& input, std::string message);
+    void decodeMessage(std::ifstream& input, int seed);
     void writeBitmap();
     int generateSeed();
     void printBitMapInformation();
 
 private:
-    void copyData(std::ifstream &input);
+    void copyData(std::ifstream& input);
 };
 
 

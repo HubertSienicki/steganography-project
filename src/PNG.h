@@ -28,16 +28,18 @@ struct PNGFileHeader {
 };
 
 struct PNG {
-    const char *filename;
+    const char* filename;
     PNGFileHeader file_header;
-    IDATChunk *data;
+    IDATChunk* data;
 
-    PNG(const char *filename);                     //Default read constructor
-    PNG(const char *filename, std::string message);//Message to encode
-    PNG(const char *filename, int seed);           //Default to decode
+    PNG(const char* filename);                     //Default read constructor
+    PNG(const char* filename, std::string message);//Message to encode
+    PNG(const char* filename, int seed);           //Default to decode
 
 
-    void readPNG(std::ifstream &input);
+    void readPNG(std::ifstream& input);
+    void encode(std::ifstream& input, std::string message);
+    void decode(std::ifstream& input, int seed);
     void writePNG();
     void printPNGInfo();
     int generateSeed();
