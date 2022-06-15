@@ -61,14 +61,8 @@ build CMakeFiles/steganography_project.dir/src/BMP.cpp.obj: CXX_COMPILER__stegan
   OBJECT_DIR = CMakeFiles\steganography_project.dir
   OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
 
-build CMakeFiles/steganography_project.dir/src/PNG.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/PNG.cpp || cmake_object_order_depends_target_steganography_project
-  DEP_FILE = CMakeFiles\steganography_project.dir\src\PNG.cpp.obj.d
-  FLAGS = -g -std=gnu++20
-  OBJECT_DIR = CMakeFiles\steganography_project.dir
-  OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
-
-build CMakeFiles/steganography_project.dir/src/PNGFIleHeader.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/PNGFIleHeader.cpp || cmake_object_order_depends_target_steganography_project
-  DEP_FILE = CMakeFiles\steganography_project.dir\src\PNGFIleHeader.cpp.obj.d
+build CMakeFiles/steganography_project.dir/src/PPM.cpp.obj: CXX_COMPILER__steganography_project_Debug C$:/Users/kneiv/CLionProjects/steganography-project/src/PPM.cpp || cmake_object_order_depends_target_steganography_project
+  DEP_FILE = CMakeFiles\steganography_project.dir\src\PPM.cpp.obj.d
   FLAGS = -g -std=gnu++20
   OBJECT_DIR = CMakeFiles\steganography_project.dir
   OBJECT_FILE_DIR = CMakeFiles\steganography_project.dir\src
@@ -81,7 +75,7 @@ build CMakeFiles/steganography_project.dir/src/PNGFIleHeader.cpp.obj: CXX_COMPIL
 #############################################
 # Link the executable steganography_project.exe
 
-build steganography_project.exe: CXX_EXECUTABLE_LINKER__steganography_project_Debug CMakeFiles/steganography_project.dir/main.cpp.obj CMakeFiles/steganography_project.dir/src/BMP.cpp.obj CMakeFiles/steganography_project.dir/src/PNG.cpp.obj CMakeFiles/steganography_project.dir/src/PNGFIleHeader.cpp.obj
+build steganography_project.exe: CXX_EXECUTABLE_LINKER__steganography_project_Debug CMakeFiles/steganography_project.dir/main.cpp.obj CMakeFiles/steganography_project.dir/src/BMP.cpp.obj CMakeFiles/steganography_project.dir/src/PPM.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\steganography_project.dir

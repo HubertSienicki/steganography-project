@@ -1,5 +1,6 @@
 #include "BMP.h"
 #include "OptionsManager.cpp"
+#include "PPM.h"
 #include <chrono>
 #include <iostream>
 #include <utility>
@@ -25,12 +26,13 @@ OptionsManager::OptionsManager(std::string argument, const char* pathToFile, std
  * @brief Displays information about a file
  */
 void OptionsManager::fileInformation() {
-    std::cout << "Argument: " << this->argument << "\n";
     std::cout << "FILE NAME: " << this->file.filename() << "\n";
 
     if (this->extension == ".bmp") {
         BMP bitMap(this->filename);
         bitMap.printBitMapInformation();
+    } else if (this->extension == ".ppm") {
+        (PPM(this->filename));
     }
     auto fileTime = fs::last_write_time(this->file);
     print_last_write_time(fileTime);
@@ -42,7 +44,7 @@ void OptionsManager::fileInformation() {
  */
 
 void OptionsManager::encrypt(std::string message) {
-    BMP bitmap(this->filename, message);
+    (BMP(this->filename, std::move(message)));
 }
 
 /**
@@ -50,5 +52,5 @@ void OptionsManager::encrypt(std::string message) {
  * @param seed
  */
 void OptionsManager::decrypt(int seed) {
-    BMP bitmap(this->filename, seed);
+    (BMP(this->filename, seed));
 }

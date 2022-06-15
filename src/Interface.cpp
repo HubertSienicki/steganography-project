@@ -1,8 +1,8 @@
 
 struct Interface {
 public:
-    bool init(int argc, char** argv);
-    bool Validate(int argc, char** argv);
-    std::string getExtension(char** argv);
+    static bool init(int argc, char** argv);
+    static bool Validate(int argc, char** argv);
+    static std::string getExtension(char** argv);
     Interface();
 };

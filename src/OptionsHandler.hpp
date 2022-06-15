@@ -17,9 +17,9 @@ OptionsHandler::OptionsHandler(int argc, char** argv) {
  */
 
 bool OptionsHandler::Validate_Argument() {
-    for (int i = 0; i < this->possibleArguments.size(); i++) {
-        if (this->possibleArguments.at(i) == this->argument) {
-            return 1;
+    for (const auto & possibleArgument : this->possibleArguments) {
+        if (possibleArgument == this->argument) {
+            return true;
         }
     }
     throw InvalidArgumentException();
@@ -35,19 +35,17 @@ bool OptionsHandler::Validate_Argument() {
 
 bool OptionsHandler::Validate_Extension() {
     try {
-        for (int i = 0; i < this->possibleFormats.size(); i++) {
-            if (this->possibleFormats.at(i) == this->extension) {
+        for (const auto & possibleFormat : this->possibleFormats) {
+            if (possibleFormat == this->extension) {
                 std::cout << "INFO: Extension found: " << this->extension << std::endl;
-                return 1;
+                return true;
             }
         }
         throw InvalidFormatException();
     } catch (const InvalidFormatException& e) {
         std::cout << e.what() << '\n';
-        return 0;
+        return false;
     }
-
-    return 0;
 }
 
 
@@ -63,7 +61,7 @@ bool OptionsHandler::findExtension() {
             std::string extension;
             extension = path.substr(i, path.length() - 1);
             this->extension = extension;
-            return 1;
+            return true;
         }
     }
     throw FileNotFoundException();

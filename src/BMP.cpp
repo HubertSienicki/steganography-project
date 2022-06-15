@@ -67,11 +67,10 @@ void BMP::readBMP(const char* filename) {
  *
  * @param input ifstream of a file
  */
-
 void BMP::readBMPFileHeader(std::ifstream& input) {
-    for (int i = 0; i < 14; i++) {
+    for (unsigned int& i: bmpFileHeader) {
         temp = (unsigned char) input.get();
-        bmpFileHeader[i] = temp;
+        i = temp;
     }
 
     this->bmp_file_header.signature = (bmpFileHeader[0] << 8) | bmpFileHeader[1];
@@ -87,9 +86,9 @@ void BMP::readBMPFileHeader(std::ifstream& input) {
  */
 
 void BMP::readBMPInfoHeader(std::ifstream& input) {
-    for (int i = 0; i < 124; i++) {
+    for (unsigned int & i : bmpInfoHeader) {
         temp = (unsigned char) input.get();
-        bmpInfoHeader[i] = temp;
+        i = temp;
     }
 
     this->bmp_info_header.header_size = (((bmpInfoHeader[3] << 8) | bmpInfoHeader[2]) << 8 | bmpInfoHeader[1]) << 8 | bmpInfoHeader[0];
@@ -167,7 +166,7 @@ void BMP::writeBitmap() {
  * @param seed Generated seed for decoding message.
  */
 
-void BMP::decodeMessage(std::ifstream& input, int seed) {
+void BMP::decodeMessage(std::ifstream& input, int seed) const {
 
     int msgLength = seed / 8;
     char decodedMessage[msgLength];
@@ -182,7 +181,7 @@ void BMP::decodeMessage(std::ifstream& input, int seed) {
             decodedChar[7 - j] = currentChar[0];
         }
         unsigned long longChar = decodedChar.to_ulong();
-        unsigned char c = static_cast<unsigned char>(longChar);
+        auto c = static_cast<unsigned char>(longChar);
         decodedMessage[i] = c;
     }
 
@@ -196,7 +195,7 @@ void BMP::decodeMessage(std::ifstream& input, int seed) {
 /**
  * @brief Prints bitmap information
  */
-void BMP::printBitMapInformation() {
+void BMP::printBitMapInformation() const {
     std::cout << "Size of a bitmap: " << this->bmp_file_header.fileSize * std::pow(10, -3) << " kB"
               << "\n";
     std::cout << "Dimensions of a bitmap: " << this->bmp_info_header.width << "x" << this->bmp_info_header.height << " (pixels) "
@@ -215,7 +214,7 @@ void BMP::printBitMapInformation() {
 
 void BMP::copyData(std::ifstream& input) {
     this->dataCopy = new unsigned char[dataSize];
-    unsigned int value = 0;
+    unsigned int value;
 
     input.seekg(0);
 
@@ -226,8 +225,9 @@ void BMP::copyData(std::ifstream& input) {
 }
 
 /**
- * @return seed
+ * @brief Returns seed for a bitmap
+ * @return int seed
  */
-int BMP::generateSeed() {
-    return this->bitsToEncode;//bitcount for now.
+int BMP::generateSeed() const {
+    return this->bitsToEncode;
 }

@@ -7,7 +7,7 @@
 
 std::string message = "Program allowing the user to encrypt and decrypt \n messages using LSB insertion method \n";
 
-Interface::Interface() {}
+Interface::Interface() = default;
 
 /**
  * @brief 
@@ -33,52 +33,50 @@ bool Interface::init(int argc, char** argv) {
     /**
      * @fixed made code below less ugly
      */
-
     if ((argv[2] == nullptr || argv[2] == "") && (argv[1] != "-h" || argv[1] != "--help")) {
         std::cerr << "ERROR: Provided path is empty. Please provide a path to the file you wish to encode to a file."
                   << "\n";
-        return 0;
+        return false;
     } else {
-        if (this->Validate(argc, argv)) {
+        if (Interface::Validate(argc, argv)) {
 
             std::string currentArg = argv[1];//Allows for easier comparison.
-            OptionsManager manager(currentArg, argv[2], this->getExtension(argv));
+            OptionsManager manager(currentArg, argv[2], Interface::getExtension(argv));
 
             if (currentArg == "-i") {
                 manager.fileInformation();
-                return 0;
+                return false;
 
             } else if (currentArg == "-e") {
 
                 if (argv[3] == nullptr || argv[3] == "") {
 
                     std::cerr << "ERROR: Empty encryption message...";
-                    return 0;
+                    return false;
 
                 } else {
-
                     manager.encrypt(argv[3]);
-                    return 0;
+                    return false;
                 }
             } else if (currentArg == "-d") {
 
                 if (argv[3] == nullptr || argv[3] == "") {
 
                     std::cerr << "ERROR: Empty seed needed for decryption...";
-                    return 0;
+                    return false;
 
                 } else {
 
                     int seed = std::stoi(argv[3]);
                     manager.decrypt(seed);
-                    return 0;
+                    return false;
                 }
             }
         } else {
-            return 0;
+            return false;
         }
     }
-    return 0;
+    return false;
 }
 
 /**
@@ -98,7 +96,7 @@ bool Interface::Validate(int argc, char** argv) {
                 if (handler.findExtension()) {
                     try {
                         if (handler.Validate_Extension()) {
-                            return 1;
+                            return true;
                         }
                     } catch (const InvalidFormatException& e) {
                         std::cerr << e.what() << '\n';
@@ -107,13 +105,13 @@ bool Interface::Validate(int argc, char** argv) {
             } catch (const FileNotFoundException& e) {
                 std::cerr << e.what() << '\n';
             }
-            return 0;
+            return false;
         }
     } catch (const InvalidArgumentException& e) {
-        std::cerr << e.what(handler.getArgument()) << '\n';
-        return 0;
+        std::cerr << InvalidArgumentException::what(handler.getArgument()) << '\n';
+        return false;
     }
-    return 0;
+    return false;
 }
 
 /**
@@ -126,11 +124,10 @@ std::string Interface::getExtension(char** argv) {
 
     for (int i = 0; i < path.size(); i++) {
         if (path.at(i) == '.') {
-            std::string extension;
             extension = path.substr(i, path.length() - 1);
             extension = extension;
             return extension;
         }
     }
-    return NULL;
+    return "nullptr";
 }
