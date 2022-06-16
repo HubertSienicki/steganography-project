@@ -26,7 +26,7 @@ bool Interface::init(int argc, char** argv) {
     app.add_option("-i, --info", "Prints information about a provided file. \nUSAGE: ./steganography_project.exe -i *path/to/file*")->expected(1);
     app.add_option("-e, --encrypt", "Encryption")->expected(2);
     app.add_option("-d, --decrypt", "Decryption")->expected(2);
-    app.add_option("-c, --check", "Check");
+    app.add_option("-c, --check", "Check")->expected(2);
 
     CLI11_PARSE(app, argc, argv);
 
@@ -43,11 +43,11 @@ bool Interface::init(int argc, char** argv) {
             std::string currentArg = argv[1];//Allows for easier comparison.
             OptionsManager manager(currentArg, argv[2], Interface::getExtension(argv));
 
-            if (currentArg == "-i") {
+            if (currentArg == "-i"|| currentArg == "--info") {
                 manager.fileInformation();
                 return false;
 
-            } else if (currentArg == "-e") {
+            } else if (currentArg == "-e" || currentArg == "--encrypt") {
 
                 if (argv[3] == nullptr || argv[3] == "") {
 
@@ -58,7 +58,7 @@ bool Interface::init(int argc, char** argv) {
                     manager.encrypt(argv[3]);
                     return false;
                 }
-            } else if (currentArg == "-d") {
+            } else if (currentArg == "-d"|| currentArg == "--decrypt") {
 
                 if (argv[3] == nullptr || argv[3] == "") {
 
@@ -71,8 +71,18 @@ bool Interface::init(int argc, char** argv) {
                     manager.decrypt(seed);
                     return false;
                 }
+            }if (currentArg == "-c" | currentArg == "--check"){
+                if (argv[3] == nullptr || argv[3] == "") {
+
+                    std::cerr << "ERROR: Empty message needed for checking...";
+                    return false;
+
+                } else {
+                    manager.check(argv[3]);
+                    return false;
+                }
             }
-        } else {
+        } else  {
             return false;
         }
     }

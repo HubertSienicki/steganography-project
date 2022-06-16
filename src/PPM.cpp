@@ -10,13 +10,12 @@
 
 PPM::PPM(const char* filename) {
     this->filename = filename;
-    std::ifstream input(this->filename,std::ios::binary);
+    std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file";
     } else {
         this->readPPM(input);
-        this->printPPMInfo();
     }
 }
 
@@ -38,9 +37,9 @@ PPM::PPM(const char* filename, int seed) {
     this->filename = filename;
     std::ifstream input(this->filename, std::ios::binary);
 
-    if(!input){
+    if (!input) {
         std::cerr << "Could not open a file";
-    }else{
+    } else {
         this->readPPM(input);
         this->decode(input, seed);
     }
@@ -132,8 +131,13 @@ void PPM::encode(std::ifstream& input, std::string message) {
     }
 }
 
+/**
+ * Decodes a message using a provided seed
+ * @param input - input to a file
+ * @param seed - seed to decode a message
+ */
 void PPM::decode(std::ifstream& input, int seed) {
-    int msgLength = seed/8;
+    int msgLength = seed / 8;
     char decodedMessage[msgLength];
 
     std::bitset<8> currentChar;
@@ -150,12 +154,12 @@ void PPM::decode(std::ifstream& input, int seed) {
         auto c = static_cast<unsigned char>(longChar);
         decodedMessage[i] = c;
     }
-        std::cout << "Decoded Message: ";
+    std::cout << "Decoded Message: ";
 
-        for (int i = 0; i < msgLength; ++i) {
-           std::cout << decodedMessage[i];
-        }
+    for (int i = 0; i < msgLength; ++i) {
+        std::cout << decodedMessage[i];
     }
+}
 
 /**
  * Writes a new file containing encoded information
@@ -169,7 +173,7 @@ void PPM::writePPM() const {
     } else {
         file.write(reinterpret_cast<char*>(this->dataCopy), this->dataSize);
 
-        std::cout << "\n------------------------------------------ \n";
+        std::cout << "------------------------------------------ \n";
         std::cout << "File has been written successfully! \n"
                   << "Seed: " << this->generateSeed() << "\n";
         std::cerr << "INFO: PLEASE REMEMBER TO SAVE THE SEED AS IT IS IMPORTANT TO DECODE THE MESSAGE! \n";
@@ -214,8 +218,19 @@ void PPM::bitSwitch(std::string message, int messageLength) const {
     }
 }
 
+/**
+ * @return generated seed
+ */
 int PPM::generateSeed() const {
     return this->bitsToEncode;
 }
 
-PPM::~PPM()= default;
+void PPM::check(const std::string& message) const {
+    if (this->dataSize < message.size() * 8) {
+        std::cerr << "WARNING: The message is too big for provided photo: " << this->filename;
+    } else {
+        std::cout << "This message \"" << message << "\" could be encoded inside this file: " << this->filename;
+    }
+}
+
+PPM::~PPM() = default;

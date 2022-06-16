@@ -16,4 +16,5 @@ public:
     void fileInformation();
     void encrypt(std::string message);
     void decrypt(int seed);
+    void check(std::string message);
 };

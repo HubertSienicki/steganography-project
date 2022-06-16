@@ -32,7 +32,8 @@ void OptionsManager::fileInformation() {
         BMP bitMap(this->filename);
         bitMap.printBitMapInformation();
     } else if (this->extension == ".ppm") {
-        (PPM(this->filename));
+        PPM ppm(this->filename);
+        ppm.printPPMInfo();
     }
     auto fileTime = fs::last_write_time(this->file);
     print_last_write_time(fileTime);
@@ -60,5 +61,14 @@ void OptionsManager::decrypt(int seed) {
         (BMP(this->filename, seed));
     }else if(this->extension == ".ppm"){
         (PPM(this->filename, seed));
+    }
+}
+void OptionsManager::check(std::string message) {
+    if(this->extension == ".bmp"){
+        BMP bmp(this->filename);
+        bmp.check(message);
+    }else if(this->extension == ".ppm"){
+        PPM ppm(this->filename);
+        ppm.check(message);
     }
 }

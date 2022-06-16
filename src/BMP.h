@@ -53,6 +53,7 @@ struct BMP {
     void writeBitmap() const;
     [[nodiscard]] int generateSeed() const;
     void printBitMapInformation() const;
+    void check(const std::string& message) const;
 
 private:
     void copyData(std::ifstream& input);

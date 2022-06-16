@@ -207,14 +207,10 @@ void BMP::printBitMapInformation() const {
               << "\n";
 }
 
-
-//HELPER METHOD
-
 /**
  * @brief copies a whole bitmap
  * @param input
  */
-
 void BMP::copyData(std::ifstream& input) {
     this->dataCopy = new unsigned char[this->dataSize];
     unsigned int value;
@@ -233,4 +229,14 @@ void BMP::copyData(std::ifstream& input) {
  */
 int BMP::generateSeed() const {
     return this->bitsToEncode;
+}
+/**
+ * Checks if a message will fit into bytes of a bitmap
+ */
+void BMP::check(const std::string& message) const {
+    if(this->dataSize < message.length() * 8){
+        std::cerr << "WARNING: The message is too big for provided photo: " << this->filename;
+    }else{
+        std::cout << "This message \"" << message << "\" could be encoded inside this file: " << this->filename;
+    }
 }
