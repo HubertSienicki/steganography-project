@@ -64,7 +64,6 @@ void BMP::readBMP(const char* filename) {
 
 /**
  * @brief Reads a file header of a bmp file
- *
  * @param input ifstream of a file
  */
 void BMP::readBMPFileHeader(std::ifstream& input) {
@@ -112,27 +111,31 @@ void BMP::encodeMessage(std::ifstream& input, std::string message) {
     this->bitsToEncode = messageLength * 8;// Every letter is 8 bits, hence the table size will is msg length * 8
 
     if (this->bmp_info_header.bits_per_pixel == 24) {
-        input.seekg(this->bmp_file_header.data_offset);
+        if (!messageLength < this->dataSize){
+            input.seekg(this->bmp_file_header.data_offset);
 
-        this->copyData(input);
+            this->copyData(input);
 
-        input.close();
+            input.close();
 
-        std::bitset<8> toEncode[bitsToEncode];// for easier read data will be encoded to a set of binary letters
+            std::bitset<8> toEncode[bitsToEncode];// for easier read data will be encoded to a set of binary letters
 
-        for (int j = 0; j < bitsToEncode; ++j) {
-            toEncode[j] = this->dataCopy[this->bmp_file_header.data_offset + j];// filling a table of bits for encoding;
-        }
+            for (int j = 0; j < bitsToEncode; ++j) {
+                toEncode[j] = this->dataCopy[this->bmp_file_header.data_offset + j];// filling a table of bits for encoding;
+            }
 
-        for (int i = 0; i < messageLength; ++i) {
-            std::bitset<8> charBinary(message[i]);// binary representation of a letter in a message;
-            for (int j = 0; j < 8; ++j) {
-                if (charBinary[7 - j] != toEncode[8 * i + j][7]) {
-                    this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] = this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] << 1;
+            for (int i = 0; i < messageLength; ++i) {
+                std::bitset<8> charBinary(message[i]);// binary representation of a letter in a message;
+                for (int j = 0; j < 8; ++j) {
+                    if (charBinary[7 - j] != toEncode[8 * i + j][7]) {
+                        this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] = this->dataCopy[this->bmp_file_header.data_offset + 8 * i + j] << 1;
+                    }
                 }
             }
+            this->writeBitmap();
+        }else{
+            std::cerr << "The message does not fit inside this BitMap. ";
         }
-        this->writeBitmap();
     } else {
         std::cerr << "BitMap is not supported for " << this->bmp_info_header.bits_per_pixel << " bits, please try again with a 24 bit BitMap. \n";
     }
@@ -142,7 +145,7 @@ void BMP::encodeMessage(std::ifstream& input, std::string message) {
  * @brief writes a bitmap to a new file
  */
 
-void BMP::writeBitmap() {
+void BMP::writeBitmap() const {
     std::ofstream file;
     file.open("C:\\Users\\kneiv\\CLionProjects\\steganography-project\\testDir\\test.bmp", std::ios::out | std::ios::binary);
 

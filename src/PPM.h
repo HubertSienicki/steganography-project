@@ -9,15 +9,15 @@
 /*
  * 16 byte header
  */
-struct PPMHeader{
-    std::uint16_t signature; // should be 5036
+struct PPMHeader {
+    std::uint16_t signature;// should be 5036
     std::int8_t width[4];
     std::int8_t height[4];
     std::int8_t colorMax[3];
+    int data_offset;
 };
 
-struct PPM
-{
+struct PPM {
     PPMHeader header{};
 
     const char* filename;
@@ -30,10 +30,16 @@ struct PPM
     PPM(const char* filename, int seed);
 
     void readPPM(std::ifstream& input);
+    void writePPM() const;
     void printPPMInfo() const;
+
+    void encode(std::ifstream& input, std::string message) const;
+
+
 
     void copyData(std::ifstream& input);
     void printImageSize() const;
+    void bitSwitch(std::string message, int messageLength) const;
 };
 
 

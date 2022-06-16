@@ -50,7 +50,7 @@ struct BMP {
     void readBMPInfoHeader(std::ifstream& input);
     void encodeMessage(std::ifstream& input, std::string message);
     void decodeMessage(std::ifstream& input, int seed) const;
-    void writeBitmap();
+    void writeBitmap() const;
     [[nodiscard]] int generateSeed() const;
     void printBitMapInformation() const;
 

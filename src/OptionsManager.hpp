@@ -44,7 +44,11 @@ void OptionsManager::fileInformation() {
  */
 
 void OptionsManager::encrypt(std::string message) {
-    (BMP(this->filename, std::move(message)));
+    if(this->extension == ".bmp"){
+        (BMP(this->filename, std::move(message)));
+    }else if(this->extension == ".ppm"){
+        (PPM(this->filename, std::move(message)));
+    }
 }
 
 /**
