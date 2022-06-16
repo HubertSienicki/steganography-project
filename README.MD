@@ -2,7 +2,7 @@
 
 # steganography-project
 
-For my midterm project to pass c++ I decided to choose what seemed like the hardest option of them all. Here's my first and probably final fight with the C-family language. Enjoy.
+Who needs this? No idea. It was a good learning experience though.
 
 
 
