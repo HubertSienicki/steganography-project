@@ -2,14 +2,14 @@
 
 struct InvalidFormatException : public std::exception {
 public:
-    [[nodiscard]] const char* what() const noexcept override {
+     const char* what() const noexcept override {
         return "Invalid file format. Please try again with the following formats: [.bmp, .ppm]";
     }
 };
 
 struct FileNotFoundException : public std::exception {
 public:
-    [[nodiscard]] const char* what() const noexcept override {
+    const char* what() const noexcept override {
         return "File not found. Please validate the path and try again.";
     }
 };

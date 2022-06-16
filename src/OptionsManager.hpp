@@ -13,7 +13,7 @@ auto print_last_write_time = [](fs::file_time_type const& fileTime) -> void {
     std::time_t currentFileTime = std::chrono::system_clock::to_time_t(std::chrono::file_clock::to_sys(fileTime));
     std::cout << "LAST MODIFIED: " << std::asctime(std::localtime(&currentFileTime)) << "\n";
 };
-//----------------//
+
 
 OptionsManager::OptionsManager(std::string argument, const char* pathToFile, std::string extension) {
     this->file = fs::path(pathToFile);
@@ -56,5 +56,9 @@ void OptionsManager::encrypt(std::string message) {
  * @param seed
  */
 void OptionsManager::decrypt(int seed) {
-    (BMP(this->filename, seed));
+    if (this->extension == ".bmp") {
+        (BMP(this->filename, seed));
+    }else if(this->extension == ".ppm"){
+        (PPM(this->filename, seed));
+    }
 }

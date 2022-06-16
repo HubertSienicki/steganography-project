@@ -15,7 +15,7 @@ unsigned char temp;             //temp for holding data from a bitmap
 //Constructor invokes read method.
 BMP::BMP(const char* filename) {
     this->filename = filename;
-    std::ifstream input(this->filename);
+    std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
@@ -27,7 +27,7 @@ BMP::BMP(const char* filename) {
 //Encode
 BMP::BMP(const char* filename, std::string message) {
     this->filename = filename;
-    std::ifstream input(this->filename);
+    std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
@@ -40,7 +40,7 @@ BMP::BMP(const char* filename, std::string message) {
 //Decode
 BMP::BMP(const char* filename, int seed) {
     this->filename = filename;
-    std::ifstream input(this->filename);
+    std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file. Please try again. \n";
@@ -216,7 +216,7 @@ void BMP::printBitMapInformation() const {
  */
 
 void BMP::copyData(std::ifstream& input) {
-    this->dataCopy = new unsigned char[dataSize];
+    this->dataCopy = new unsigned char[this->dataSize];
     unsigned int value;
 
     input.seekg(0);

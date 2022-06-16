@@ -10,7 +10,7 @@
 
 PPM::PPM(const char* filename) {
     this->filename = filename;
-    std::ifstream input(this->filename);
+    std::ifstream input(this->filename,std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file";
@@ -22,7 +22,7 @@ PPM::PPM(const char* filename) {
 
 PPM::PPM(const char* filename, std::string message) {
     this->filename = filename;
-    std::ifstream input(this->filename);
+    std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
         std::cerr << "Could not open a file";
@@ -30,6 +30,19 @@ PPM::PPM(const char* filename, std::string message) {
         this->readPPM(input);
         this->copyData(input);
         this->encode(input, std::move(message));
+        this->writePPM();
+    }
+}
+
+PPM::PPM(const char* filename, int seed) {
+    this->filename = filename;
+    std::ifstream input(this->filename, std::ios::binary);
+
+    if(!input){
+        std::cerr << "Could not open a file";
+    }else{
+        this->readPPM(input);
+        this->decode(input, seed);
     }
 }
 
@@ -42,9 +55,9 @@ void PPM::readPPM(std::ifstream& input) {
     for (int i = 1; i > 0; ++i) {
         auto temp = (unsigned char) input.get();
 
-        if (temp == '\n' || temp == ' ') {
+        if (temp == '\n' || temp == ' ' || temp == '#') {
             index++;
-            if (i == 17) {
+            if (index == 4) {
                 this->header.data_offset = i;
 
                 input.seekg(0, std::ios::end);
@@ -109,36 +122,59 @@ void PPM::printImageSize() const {
  * @param input - input to .ppm file
  * @param message - message to encode to a file
  */
-void PPM::encode(std::ifstream& input, std::string message) const {
+void PPM::encode(std::ifstream& input, std::string message) {
     int messageLength = message.size();
-    int bitsToEncode = messageLength * 8;
+    this->bitsToEncode = messageLength * 8;
 
     if (messageLength <= dataSize) {
         input.seekg(this->header.data_offset);
-
-        std::bitset<8> toEncode[bitsToEncode];
-
-        for (int i = 0; i < bitsToEncode; ++i) {
-            toEncode[i] = this->dataCopy[this->header.data_offset + i];
-            std::cout << toEncode[i] << " ";
-        }
-        std::cout << "\n\n";
-
         this->bitSwitch(message, messageLength);
     }
 }
+
+void PPM::decode(std::ifstream& input, int seed) {
+    int msgLength = seed/8;
+    char decodedMessage[msgLength];
+
+    std::bitset<8> currentChar;
+    std::bitset<8> decodedChar;
+
+    input.seekg(this->header.data_offset);
+
+    for (int i = 0; i < msgLength; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            currentChar = (std::bitset<8>) input.get();
+            decodedChar[7 - j] = currentChar[0];
+        }
+        unsigned long longChar = decodedChar.to_ulong();
+        auto c = static_cast<unsigned char>(longChar);
+        decodedMessage[i] = c;
+    }
+        std::cout << "Decoded Message: ";
+
+        for (int i = 0; i < msgLength; ++i) {
+           std::cout << decodedMessage[i];
+        }
+    }
 
 /**
  * Writes a new file containing encoded information
  */
 void PPM::writePPM() const {
     std::ofstream file;
-    file.open("C:\\Users\\kneiv\\CLionProjects\\steganography-project\\testDir\\testPPMPPM.ppm", std::iostream::out | std::ios::binary);
+    file.open("C:\\Users\\kneiv\\CLionProjects\\steganography-project\\testDir\\xd3.ppm", std::ios::out | std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "The file could not be rewritten \n.";
         return;
     } else {
         file.write(reinterpret_cast<char*>(this->dataCopy), this->dataSize);
+
+        std::cout << "\n------------------------------------------ \n";
+        std::cout << "File has been written successfully! \n"
+                  << "Seed: " << this->generateSeed() << "\n";
+        std::cerr << "INFO: PLEASE REMEMBER TO SAVE THE SEED AS IT IS IMPORTANT TO DECODE THE MESSAGE! \n";
+        file.close();
+        return;
     }
 }
 
@@ -151,8 +187,8 @@ void PPM::copyData(std::ifstream& input) {
     unsigned char value;
     input.seekg(0);
 
-    for (int i = 0; i < this->dataSize; ++i) {
-        value = (unsigned char) input.get();
+    for (int i = 0; i < dataSize; ++i) {
+        value = input.get();
         this->dataCopy[i] = value;
     }
 }
@@ -174,7 +210,12 @@ void PPM::bitSwitch(std::string message, int messageLength) const {
             } else {
                 this->dataCopy[this->header.data_offset + 8 * i + j] = ((this->dataCopy[this->header.data_offset + 8 * i + j]) & ~bitMask | (1 << 0));//change to 1 last position
             }
-            std::cout <<  (std::bitset<8>)this->dataCopy[this->header.data_offset + 8 * i + j] << " ";
         }
     }
 }
+
+int PPM::generateSeed() const {
+    return this->bitsToEncode;
+}
+
+PPM::~PPM()= default;

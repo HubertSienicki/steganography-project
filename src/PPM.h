@@ -24,22 +24,26 @@ struct PPM {
     int dataSize{};
     int fileSize{};
     unsigned char* dataCopy{};
+    int bitsToEncode;
 
     explicit PPM(const char* filename);
     PPM(const char* filename, std::string message);
     PPM(const char* filename, int seed);
+    virtual ~PPM();
 
     void readPPM(std::ifstream& input);
     void writePPM() const;
     void printPPMInfo() const;
 
-    void encode(std::ifstream& input, std::string message) const;
-
+    void encode(std::ifstream& input, std::string message);
+    void decode(std::ifstream& input, int seed);
 
 
     void copyData(std::ifstream& input);
     void printImageSize() const;
     void bitSwitch(std::string message, int messageLength) const;
+    int generateSeed() const;
+
 };
 
 
