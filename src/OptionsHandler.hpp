@@ -3,10 +3,10 @@
 #include <iostream>
 #include <string>
 
-OptionsHandler::OptionsHandler(int argc, char** argv) {
+OptionsHandler::OptionsHandler(char** argv) {
     this->argument = argv[1];
     this->path = argv[2];
-    this->extension = this->findExtension();
+    this->extension = std::to_string(this->findExtension());
 }
 
 /**
@@ -23,7 +23,6 @@ bool OptionsHandler::Validate_Argument() {
         }
     }
     throw InvalidArgumentException();
-    return 0;
 }
 
 /**
@@ -58,24 +57,13 @@ bool OptionsHandler::Validate_Extension() {
 bool OptionsHandler::findExtension() {
     for (int i = 0; i < this->path.size(); i++) {
         if (this->path.at(i) == '.') {
-            std::string extension;
-            extension = path.substr(i, path.length() - 1);
-            this->extension = extension;
+            this->extension = path.substr(i, path.length() - 1);
             return true;
         }
     }
     throw FileNotFoundException();
 }
 
-//GETTERS
-std::string OptionsHandler::getExtension() {
-    return this->extension;
-}
-
 std::string OptionsHandler::getArgument() {
     return this->argument;
-}
-
-std::string OptionsHandler::getPath() {
-    return this->path;
 }

@@ -3,19 +3,12 @@
 //
 
 #ifndef STEGANOGRAPHY_PROJECT_PPM_H
+#include "PPMHeader.h"
 #include <iostream>
 #define STEGANOGRAPHY_PROJECT_PPM_H
 
-
-struct PPMHeader {
-    std::uint16_t signature;// should be 5036
-    std::int8_t width[4];
-    std::int8_t height[4];
-    std::int8_t colorMax[3];
-    int data_offset;
-};
-
-struct PPM {
+class PPM {
+private:
     PPMHeader header{};
 
     const char* filename;
@@ -24,24 +17,23 @@ struct PPM {
     unsigned char* dataCopy{};
     int bitsToEncode{};
 
-    explicit PPM(const char* filename); // read
-    PPM(const char* filename, std::string message); //encode
-    PPM(const char* filename, int seed); //decode
-    virtual ~PPM();
-
     void readPPM(std::ifstream& input);
     void writePPM() const;
-    void printPPMInfo() const;
-
-    void encode(std::ifstream& input, std::string message);
-    void decode(std::ifstream& input, int seed);
-    void check(const std::string& message) const;
-
-
     void copyData(std::ifstream& input);
     void printImageSize() const;
     void bitSwitch(std::string message, int messageLength) const;
-    int generateSeed() const;
+    [[nodiscard]] int generateSeed() const;
+
+public:
+    explicit PPM(const char* filename);            // read
+    PPM(const char* filename, const std::string& message);//encode
+    PPM(const char* filename, int seed);           //decode
+    virtual ~PPM();
+
+    void printPPMInfo() const;
+    void encode(std::ifstream& input, const std::string& message);
+    void decode(std::ifstream& input, int seed) const;
+    void check(const std::string& message) const;
 };
 
 

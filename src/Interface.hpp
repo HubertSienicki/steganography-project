@@ -5,7 +5,8 @@
 #include <iostream>
 #include <string>
 
-std::string message = "Program allowing the user to encrypt and decrypt \n messages using LSB insertion method \n";
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wstring-compare"
 
 Interface::Interface() = default;
 
@@ -19,16 +20,16 @@ Interface::Interface() = default;
  */
 
 bool Interface::init(int argc, char** argv) {
-    CLI::App app{message};
+    CLI::App app{"Program allowing the user to encrypt and decrypt \n messages using LSB insertion method \n"};
 
     std::pair<std::string, std::string> args;
 
-    app.add_option("-i, --info", "Prints information about a provided file. \nUSAGE: ./steganography_project.exe -i *path/to/file*")->expected(1);
+    app.add_option("-i, --info", "Prints information about a provided file. \nUSAGE: ./steganography_project.exe -i *\"path/to/file\"*")->expected(1);
     app.add_option("-e, --encrypt", "Encryption")->expected(2);
     app.add_option("-d, --decrypt", "Decryption")->expected(2);
     app.add_option("-c, --check", "Check")->expected(2);
 
-    CLI11_PARSE(app, argc, argv);
+    CLI11_PARSE(app, argc, argv)
 
     /**
      * @fixed made code below less ugly
@@ -38,12 +39,12 @@ bool Interface::init(int argc, char** argv) {
                   << "\n";
         return false;
     } else {
-        if (Interface::Validate(argc, argv)) {
+        if (Interface::Validate(argv)) {
 
-            std::string currentArg = argv[1];//Allows for easier comparison.
+            std::string currentArg = argv[1];//easier comparison.
             OptionsManager manager(currentArg, argv[2], Interface::getExtension(argv));
 
-            if (currentArg == "-i"|| currentArg == "--info") {
+            if (currentArg == "-i" || currentArg == "--info") {
                 manager.fileInformation();
                 return false;
 
@@ -58,7 +59,7 @@ bool Interface::init(int argc, char** argv) {
                     manager.encrypt(argv[3]);
                     return false;
                 }
-            } else if (currentArg == "-d"|| currentArg == "--decrypt") {
+            } else if (currentArg == "-d" || currentArg == "--decrypt") {
 
                 if (argv[3] == nullptr || argv[3] == "") {
 
@@ -71,7 +72,8 @@ bool Interface::init(int argc, char** argv) {
                     manager.decrypt(seed);
                     return false;
                 }
-            }if (currentArg == "-c" | currentArg == "--check"){
+            }
+            if (currentArg == "-c" | currentArg == "--check") {
                 if (argv[3] == nullptr || argv[3] == "") {
 
                     std::cerr << "ERROR: Empty message needed for checking...";
@@ -82,7 +84,7 @@ bool Interface::init(int argc, char** argv) {
                     return false;
                 }
             }
-        } else  {
+        } else {
             return false;
         }
     }
@@ -91,15 +93,13 @@ bool Interface::init(int argc, char** argv) {
 
 /**
  * @brief Combines methods from OptionHandler class to validate if a whole path leads to a file or not.
- * 
- * @param argc 
- * @param argv 
- * @return true 
- * @return false 
+ * @param argv argument values
+ * @return true if validation completes
+ * @return false if validation was incomplete
  */
 
-bool Interface::Validate(int argc, char** argv) {
-    OptionsHandler handler(argc, argv);
+bool Interface::Validate(char** argv) {
+    OptionsHandler handler(argv);
     try {
         if (handler.Validate_Argument()) {
             try {
@@ -125,8 +125,8 @@ bool Interface::Validate(int argc, char** argv) {
 }
 
 /**
- * @param argv arguments provided to the program
- * @return extension
+ * @param argv argument values
+ * @return std::string extension extension from the end of path
  */
 std::string Interface::getExtension(char** argv) {
     std::string path = argv[2];
@@ -141,3 +141,4 @@ std::string Interface::getExtension(char** argv) {
     }
     return "nullptr";
 }
+#pragma clang diagnostic pop

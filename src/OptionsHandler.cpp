@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-struct OptionsHandler {
+class OptionsHandler {
 private:
     std::string path;
     std::string extension;
@@ -11,14 +11,11 @@ private:
 
 
 public:
-    OptionsHandler(int argc, char** argv);
+    explicit OptionsHandler(char** argv);
 
     bool Validate_Extension();
     bool findExtension();
     bool Validate_Argument();
 
-    //Getters
-    std::string getExtension();
     std::string getArgument();
-    std::string getPath();
 };

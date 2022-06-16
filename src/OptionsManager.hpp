@@ -1,10 +1,12 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cppcoreguidelines-interfaces-global-init"
+
 #include "BMP.h"
 #include "OptionsManager.cpp"
 #include "PPM.h"
 #include <chrono>
 #include <iostream>
 #include <utility>
-
 
 /**
  * @brief Helper method for printing last date modified
@@ -41,20 +43,19 @@ void OptionsManager::fileInformation() {
 
 /**
  * @brief calls for en encoding constructor
- * @param seed
+ * @param message message to encode
  */
-
 void OptionsManager::encrypt(std::string message) {
     if(this->extension == ".bmp"){
         (BMP(this->filename, std::move(message)));
     }else if(this->extension == ".ppm"){
-        (PPM(this->filename, std::move(message)));
+        (PPM(this->filename, message));
     }
 }
 
 /**
  * @brief calls for a decoding constructor
- * @param seed
+ * @param seed seed needed for decryption
  */
 void OptionsManager::decrypt(int seed) {
     if (this->extension == ".bmp") {
@@ -63,7 +64,13 @@ void OptionsManager::decrypt(int seed) {
         (PPM(this->filename, seed));
     }
 }
-void OptionsManager::check(std::string message) {
+
+/**
+ * Calls method check
+ * @refitem
+ * @param message message to check
+ */
+void OptionsManager::check(const std::string& message) {
     if(this->extension == ".bmp"){
         BMP bmp(this->filename);
         bmp.check(message);
@@ -72,3 +79,5 @@ void OptionsManager::check(std::string message) {
         ppm.check(message);
     }
 }
+
+#pragma clang diagnostic pop

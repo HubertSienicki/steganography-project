@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NullDereference" // no pointer-may-be-null for dataCopy table;
+#pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions" // no narrowing conversions warnings
 //
 // Created by kneiv on 6/15/2022.
 //
@@ -5,7 +8,6 @@
 #include "PPM.h"
 #include <bitset>
 #include <fstream>
-#include <utility>
 #include <valarray>
 
 PPM::PPM(const char* filename) {
@@ -13,23 +15,29 @@ PPM::PPM(const char* filename) {
     std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
-        std::cerr << "Could not open a file";
+        std::cerr << "Could not open a file. Please validate the path and try again. \n"
+                  << "Aborting...";
+        std::exit(1);
     } else {
         this->readPPM(input);
+        input.close();
     }
 }
 
-PPM::PPM(const char* filename, std::string message) {
+PPM::PPM(const char* filename, const std::string& message) {
     this->filename = filename;
     std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
-        std::cerr << "Could not open a file";
+        std::cerr << "Could not open a file. Please validate the path and try again. \n"
+                  << "Aborting...";
+        std::exit(1);
     } else {
         this->readPPM(input);
         this->copyData(input);
-        this->encode(input, std::move(message));
+        this->encode(input, message);
         this->writePPM();
+        input.close();
     }
 }
 
@@ -38,10 +46,13 @@ PPM::PPM(const char* filename, int seed) {
     std::ifstream input(this->filename, std::ios::binary);
 
     if (!input) {
-        std::cerr << "Could not open a file";
+        std::cerr << "Could not open a file. Please validate the path and try again. \n"
+                  << "Aborting...";
+        std::exit(1);
     } else {
         this->readPPM(input);
         this->decode(input, seed);
+        input.close();
     }
 }
 
@@ -51,11 +62,13 @@ PPM::PPM(const char* filename, int seed) {
  */
 void PPM::readPPM(std::ifstream& input) {
     int index = 0;//0->signature, 1-->width, 2-->height, 3-->Max color
+    int tableIndex = 0;
     for (int i = 1; i > 0; ++i) {
         auto temp = (unsigned char) input.get();
 
         if (temp == '\n' || temp == ' ' || temp == '#') {
             index++;
+            tableIndex = 0;
             if (index == 4) {
                 this->header.data_offset = i;
 
@@ -71,17 +84,20 @@ void PPM::readPPM(std::ifstream& input) {
                     this->header.signature = (this->header.signature << 8) | temp;
                     break;
                 case 1:
-                    this->header.width[i - 4] = (this->header.width[i - 4] << 8) | temp;
+                    this->header.width[tableIndex] = (this->header.width[tableIndex] << 8) | temp;
+                    tableIndex++;
                     break;
                 case 2:
-                    this->header.height[i - 9] = (this->header.height[i - 9] << 8) | temp;
+                    this->header.height[tableIndex] = (this->header.height[tableIndex] << 8) | temp;
+                    tableIndex++;
                     break;
                 case 3:
-                    this->header.colorMax[i - 13] = (this->header.colorMax[i - 11] << 8) | temp;
+                    this->header.colorMax[tableIndex] = (this->header.colorMax[tableIndex] << 8) | temp;
+                    tableIndex++;
                     break;
                 default:
                     std::cerr << "There was a problem with reading .ppm file. ";
-                    break;
+                    std::exit(1);
             }
         }
     }
@@ -95,6 +111,7 @@ void PPM::printPPMInfo() const {
     printImageSize();
     std::cout << "Size of a file: " << this->fileSize * std::pow(10, -3) << "kB"
               << "\n";
+    std::cout << "Color mask: " << this->header.colorMax << "\n";
 }
 
 /**
@@ -108,9 +125,13 @@ void PPM::printImageSize() const {
                 std::cout << "x";
                 printX = true;
             }
-            std::cout << this->header.height[i - 4];
+            if (this->header.height[i - 4] != '\000') {
+                std::cout << this->header.height[i - 4];
+            }
         } else {
-            std::cout << this->header.width[i];
+            if (this->header.width[i] != '\000') {
+                std::cout << this->header.width[i];
+            }
         }
     }
     std::cout << "\n";
@@ -121,7 +142,7 @@ void PPM::printImageSize() const {
  * @param input - input to .ppm file
  * @param message - message to encode to a file
  */
-void PPM::encode(std::ifstream& input, std::string message) {
+void PPM::encode(std::ifstream& input, const std::string& message) {
     int messageLength = message.size();
     this->bitsToEncode = messageLength * 8;
 
@@ -136,7 +157,7 @@ void PPM::encode(std::ifstream& input, std::string message) {
  * @param input - input to a file
  * @param seed - seed to decode a message
  */
-void PPM::decode(std::ifstream& input, int seed) {
+void PPM::decode(std::ifstream& input, int seed) const {
     int msgLength = seed / 8;
     char decodedMessage[msgLength];
 
@@ -169,6 +190,7 @@ void PPM::writePPM() const {
     file.open("C:\\Users\\kneiv\\CLionProjects\\steganography-project\\testDir\\xd3.ppm", std::ios::out | std::ios::binary);
     if (!file.is_open()) {
         std::cerr << "The file could not be rewritten \n.";
+        std::exit(1);
         return;
     } else {
         file.write(reinterpret_cast<char*>(this->dataCopy), this->dataSize);
@@ -225,6 +247,9 @@ int PPM::generateSeed() const {
     return this->bitsToEncode;
 }
 
+/**
+ * Checks if a message will fit into bytes of a portable pixel map
+ */
 void PPM::check(const std::string& message) const {
     if (this->dataSize < message.size() * 8) {
         std::cerr << "WARNING: The message is too big for provided photo: " << this->filename;
@@ -234,3 +259,4 @@ void PPM::check(const std::string& message) const {
 }
 
 PPM::~PPM() = default;
+#pragma clang diagnostic pop
